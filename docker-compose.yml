@@ -1,0 +1,19 @@
+version: '3'
+services:
+  pgcli:
+    build: . 
+    links: 
+      - postgres
+    environment:
+      DB_URL: postgresql://workshop:secretpassword@postgres/workshop_one
+      POSTGRES_USER: workshop
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: workshop_one
+      POSTGRES_PASSWORD: secretpassword
+  postgres:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_USER: workshop
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: workshop_one

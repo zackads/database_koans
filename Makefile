@@ -9,3 +9,7 @@ build:
 .PHONY: start
 start: down build
 	docker-compose run --rm --service-ports pgcli
+
+.PHONY: start-koans
+start-koans: down build
+	docker-compose run --rm --service-ports koans

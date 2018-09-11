@@ -34,8 +34,8 @@ printer.add_filter(RemoveRSpecStackTrace.new)
 begin
   require_relative './start-here/00-the-path'
   require_relative './start-here/01-connections'
-  # require_relative './start-here/02-migrations'
-  # require_relative './start-here/03-querying'
+  require_relative './start-here/02-migrations'
+  require_relative './start-here/03-querying'
   require_relative './start-here/04-joins'
 
 

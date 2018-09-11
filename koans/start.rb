@@ -1,9 +1,11 @@
 require 'rspec/expectations'
+require 'rspec/mocks'
 require_relative './exceptions.rb'
 
 system("clear")
 
 include RSpec::Matchers
+include RSpec::Mocks::ArgumentMatchers
 
 $setup = []
 $koans = []
@@ -32,12 +34,31 @@ printer.add_filter(RemoveRSpecStackTrace.new)
 begin
   require_relative './start-here/00-the-path'
   require_relative './start-here/01-connections'
+  # require_relative './start-here/02-migrations'
+  # require_relative './start-here/03-querying'
+  require_relative './start-here/04-joins'
+
 
   number_of_koans = $koans.length.to_f
+
+  raise 'No Koans' if number_of_koans == 0
+
   koans_passed = 0
   $setup.each(&:call)
 
   $koans.each do |koan|
+    db = Sequel.postgres(
+      host: 'postgres',
+      user: 'workshop',
+      password: 'secretpassword',
+      database: 'workshop_one'
+    )
+    tables = db.fetch(
+      "SELECT * FROM pg_catalog.pg_tables
+      WHERE tableowner <> 'postgres';"
+    ).all
+    tables.each { |t| db.run("DROP TABLE \"#{t[:tablename]}\" CASCADE") }
+
     koan.call
     koans_passed += 1
   end
@@ -52,6 +73,7 @@ rescue StandardError => e
   printer.execute(e.backtrace)
 end
 
+exit 1 if number_of_koans == 0
 
 puts "\n\n"
 

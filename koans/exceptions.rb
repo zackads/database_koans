@@ -1,7 +1,7 @@
 class RemoveKoanHarness
   def filter(backtrace)
     backtrace = backtrace.reject do |call|
-      call.include?('/koans/start.rb')
+      call.include?('start.rb')
     end
     backtrace << '<< Hidden calls in Koan Harness >>'
     backtrace

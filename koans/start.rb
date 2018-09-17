@@ -55,7 +55,9 @@ begin
     )
     tables = db.fetch(
       "SELECT * FROM pg_catalog.pg_tables
-      WHERE tableowner <> 'postgres';"
+      WHERE tableowner <> 'postgres'
+      AND tablename NOT LIKE 'pg_%'
+      AND tablename NOT LIKE 'sql_%';"
     ).all
     tables.each { |t| db.run("DROP TABLE \"#{t[:tablename]}\" CASCADE") }
 
@@ -80,14 +82,14 @@ puts "\n\n"
 percentage_complete = (koans_passed / number_of_koans)
 blocks_to_display = (10 * percentage_complete).to_i
 
-print "Progress [" 
+print "Progress ["
 print colorize(('#' * blocks_to_display), 32)
 print (' ' * (10 - blocks_to_display))
 print "] (#{percentage_complete * 100} %)\n\n"
 
 puts(
   colorize(
-    "|-----[DATABASE DETAILS]-----|", 
+    "|-----[DATABASE DETAILS]-----|",
     32
   )
 )

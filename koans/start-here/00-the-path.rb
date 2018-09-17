@@ -6,4 +6,3 @@ dont_edit_this_bit do
   # Don't edit these blocks.
   # They support the koans.
 end
-

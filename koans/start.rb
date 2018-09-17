@@ -60,6 +60,7 @@ begin
       AND tablename NOT LIKE 'sql_%';"
     ).all
     tables.each { |t| db.run("DROP TABLE \"#{t[:tablename]}\" CASCADE") }
+    db.disconnect
 
     koan.call
     koans_passed += 1

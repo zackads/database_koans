@@ -1,5 +1,5 @@
 koan 'loading the migration extension' do
-  Sequel.extension __change_me__
+  Sequel.extension :migration
 
   expect(Sequel::Migrator).not_to be_nil
 end
@@ -8,7 +8,7 @@ koan 'running the migrator to upgrade to latest' do
   migration_directory = "#{__dir__}/02-no-migrations"
   database_connection = MigrationKoan.database_connection
 
-  __change_me__
+  Sequel::Migrator.run(database_connection, migration_directory)
 
   expect(
     database_connection[:schema_info].first
@@ -21,7 +21,7 @@ koan 'running the migrator to upgrade to version 1' do
   migration_directory = "#{__dir__}/02-no-migrations"
   database_connection = MigrationKoan.database_connection
 
-  __change_me__
+  Sequel::Migrator.run(database_connection, migration_directory, target: 1)
 
   expect(
     database_connection[:schema_info].first
@@ -34,7 +34,7 @@ koan 'creating the fruit table' do
   migration_directory = "#{__dir__}/02-migrations"
   database_connection = MigrationKoan.database_connection
 
-  __change_me__
+  Sequel::Migrator.run(database_connection, migration_directory)
 
   expect(
     MigrationKoan.fruit_table_exists?(database_connection)
@@ -67,7 +67,7 @@ koan 'creating the harvest table' do
   migration_directory = "#{__dir__}/02-migrations"
   database_connection = MigrationKoan.database_connection
 
-  __change_me__
+  Sequel::Migrator.run(database_connection, migration_directory)
 
   columns = MigrationKoan.column_information(
     database_connection,
@@ -118,22 +118,22 @@ dont_edit_this_bit do
       )
     end
 
-    def self.column_information(db, table='fruit')
+    def self.column_information(db, table = 'fruit')
       columns = db.fetch(
-        "SELECT column_name, 
-                data_type, 
-                is_nullable, 
+        "SELECT column_name,
+                data_type,
+                is_nullable,
                 identity_increment,
                 ordinal_position
         FROM information_schema.columns
-        WHERE table_name = '#{table}'" 
+        WHERE table_name = '#{table}'"
       ).all
     end
 
     def self.fruit_table_exists?(db)
       db.fetch(
-        "SELECT * FROM pg_catalog.pg_tables 
-        WHERE tablename = 'fruit'" 
+        "SELECT * FROM pg_catalog.pg_tables
+        WHERE tablename = 'fruit'"
       ).all
     end
   end

@@ -1,5 +1,5 @@
 koan 'lets play a game of change the placeholders!' do
-  expect(__change_me__).to eq(true)
+  expect(true).to eq(true)
 end
 
 dont_edit_this_bit do

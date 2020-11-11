@@ -6,7 +6,7 @@ koan 'join two tables together' do
 
 
   line_items = database[:line_item]
-    .join(__change_me__)
+    .join(:product, id: :product_id)
     .all
 
   expect(line_items.length).to eq(1)
@@ -27,7 +27,7 @@ koan 'derive a new column from two tables' do
         description, 
         price, 
         quantity, 
-        (__change_me__).as(:total)
+        (price * quantity).as(:total)
       ]
     end
     .join(:product, id: :product_id)
